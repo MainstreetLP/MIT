@@ -35,7 +35,7 @@ contract MainstreetCrowdfundTest is Test {
     function setUp() {
         start = block.timestamp;
         end = start + 5184000;
-        mainstreetCrowdfund = new MainstreetCrowdfund(start, end, 10 ether, exitAddress, this, 0);
+        mainstreetCrowdfund = new MainstreetCrowdfund(start, end, 10 ether, exitAddress, this, 0, 0);
     }
 
     function testThrowPurchaseNoValue() {

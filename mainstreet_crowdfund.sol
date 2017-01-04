@@ -56,14 +56,16 @@ contract MainstreetCrowdfund {
      * @param _exitAddress Address that all ETH should be forwarded to.
      * @param whitelist1 First address that can send ETH.
      * @param whitelist2 Second address that can send ETH.
+     * @param whitelist3 Third address that can send ETH.
      */
-    function MainstreetCrowdfund(uint _start, uint _end, uint _limit, address _exitAddress, address whitelist1, address whitelist2) {
+    function MainstreetCrowdfund(uint _start, uint _end, uint _limit, address _exitAddress, address whitelist1, address whitelist2, address whitelist3) {
         start = _start;
         end = _end;
         limit = _limit;
         
         whitelistedAddresses[whitelist1] = true;
         whitelistedAddresses[whitelist2] = true;
+        whitelistedAddresses[whitelist3] = true;
         exitAddress = _exitAddress;
     }
     
