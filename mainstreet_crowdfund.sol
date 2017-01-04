@@ -21,7 +21,7 @@ contract MainstreetCrowdfund {
 
     mapping (address => bool) public whitelistedAddresses;
     
-    address exitAddress;
+    address public exitAddress;
 
     event MITPurchase(address indexed sender, address indexed recipient, uint ETH, uint MIT);
 
