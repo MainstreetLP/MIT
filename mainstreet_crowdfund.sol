@@ -72,10 +72,10 @@ contract MainstreetCrowdfund {
         MIT = msg.value * 8;
         uint extra;
         if (msg.value >= 250000 ether) {        // ether is just a multiplier
-            extra = (MIT / 1000) * 75;      // 7.5%
+            extra = (MIT * 75) / 1000;      // 7.5%
         }
         else if (msg.value >= 62500 ether) {    // ether is just a multiplier
-            extra = (MIT / 10000) * 375;    // 3.75%
+            extra = (MIT * 375) / 10000;    // 3.75%
         }
         
         if (block.timestamp - start < 1 weeks) {
