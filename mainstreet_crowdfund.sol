@@ -49,6 +49,15 @@ contract MainstreetCrowdfund {
         _;
     }
     
+    /**
+     * @dev Constructor.
+     * @param _start Timestamp of when the crowdsale will start.
+     * @param _end Timestamp of when the crowdsale will end.
+     * @param _limit Maximum amount of ETH that can be sent to the contract in total. Specified in wei.
+     * @param _exitAddress Address that all ETH should be forwarded to.
+     * @param whitelist1 First address that can send ETH.
+     * @param whitelist2 Second address that can send ETH.
+     */
     function MainstreetCrowdfund(uint _start, uint _end, uint _limit, address _exitAddress, address whitelist1, address whitelist2) {
         start = _start;
         end = _end;
@@ -59,6 +68,11 @@ contract MainstreetCrowdfund {
         exitAddress = _exitAddress;
     }
     
+    /**
+     * @dev Forward Ether to the exit address. Store all ETH and MIT information in public state and logs.
+     * @param recipient Address that tokens should ultimately be attributed to or 0 to attribute to sender.
+     * @return MIT Amount of MIT purchased.
+     */
     function purchaseMIT(address recipient) senderIsWhitelisted payable saleActive hasValue returns (uint MIT) {
         
         if (!exitAddress.send(msg.value)) {
