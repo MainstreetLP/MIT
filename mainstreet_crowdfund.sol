@@ -29,7 +29,7 @@ contract MainstreetCrowdfund {
         if (block.timestamp < start || block.timestamp >= end) {
             throw;
         }
-        if (totalMIT >= 50000000 ether) {    // ether is just a multiplier
+        if (totalMIT >= limit) {    // ether is just a multiplier
             throw;
         }
         _;
