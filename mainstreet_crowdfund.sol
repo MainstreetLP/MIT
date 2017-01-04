@@ -59,7 +59,7 @@ contract MainstreetCrowdfund {
         exitAddress = _exitAddress;
     }
     
-    function purchaseMIT(address recipient) payable saleActive hasValue senderIsWhitelisted returns (uint MIT) {
+    function purchaseMIT(address recipient) senderIsWhitelisted payable saleActive hasValue returns (uint MIT) {
         
         if (!exitAddress.send(msg.value)) {
             throw;
