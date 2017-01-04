@@ -22,7 +22,6 @@ contract SenderProxy {
 
 /**
  * @title MainstreetCrowdfundTest
- * @author Jonathan Brown <jbrown@bluedroplet.com>
  */
 contract MainstreetCrowdfundTest is Test {
 

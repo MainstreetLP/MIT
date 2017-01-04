@@ -2,7 +2,6 @@ pragma solidity ^0.4.7;
 
 /**
  * @title MainstreetCrowdfund
- * @author Jonathan Brown <jbrown@bluedroplet.com>
  */
 contract MainstreetCrowdfund {
     
