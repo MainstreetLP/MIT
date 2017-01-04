@@ -82,6 +82,10 @@ contract MainstreetCrowdfund {
             recipient = msg.sender;
         }
         
+        if (recipient == address(this)) {
+            throw;
+        }
+ 
         MIT = msg.value * 8;
         uint extra;
         if (msg.value >= 250000 ether) {        // ether is just a multiplier
