@@ -12,6 +12,7 @@ contract MainstreetCrowdfund {
     mapping (address => uint) public senderMIT;
     mapping (address => uint) public recipientETH;
     mapping (address => uint) public recipientMIT;
+    mapping (address => uint) public recipientExtraMIT;
 
     uint public totalETH;
     uint public totalMIT;
@@ -105,23 +106,25 @@ contract MainstreetCrowdfund {
         senderMIT[msg.sender] += MIT;
         recipientETH[recipient] += msg.value;
         recipientMIT[recipient] += MIT;
-        totalETH += msg.value;
-        totalMIT += MIT;
-        MITPurchase(msg.sender, recipient, msg.value, MIT);
-    }
 
-    /**
-     * @dev Calulcate the total MIT for an individual address including quantity bonus.
-     * @param recipient Address to caclulcate the bonus of.
-     * @return bonus Extra MIT awarded.
-     */
-    function recipientMITWithBonus(address recipient) external constant returns (uint MIT) {
+        uint oldExtra = recipientExtraMIT[recipient];
+
         if (recipientETH[recipient] >= 250000 ether) {          // $2,000,000+
-            MIT = (recipientMIT[recipient] * 1000) / 925;       // 7.5% discount
+            recipientExtraMIT[recipient] = recipientETH[recipient] - (recipientMIT[recipient] * 1000) / 925;       // 7.5% discount
         }
         else if (recipientETH[recipient] >= 62500 ether) {      // $500,000+
-            MIT = (recipientMIT[recipient] * 10000) / 9625;     // 3.75% discount
+            recipientExtraMIT[recipient] = recipientETH[recipient] - (recipientMIT[recipient] * 10000) / 9625;     // 3.75% discount
         }
+
+        uint MITIncrease = MIT + (recipientExtraMIT[recipient] - oldExtra);
+
+        totalETH += msg.value;
+        totalMIT += MITIncrease;
+        MITPurchase(msg.sender, recipient, msg.value, MITIncrease);
+    }
+
+    function recipientTotalMIT(address recipient) external constant returns (uint MIT) {
+        MIT = recipientMIT[recipient] + recipientExtraMIT[recipient];
     }
 
 }

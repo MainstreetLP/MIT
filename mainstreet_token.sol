@@ -44,7 +44,7 @@ contract MainstreetToken is ERC20 {
      * @return MIT Amount of MIT imported.
      */
     function importRecipient(address recipient) external notImported(recipient) returns (uint MIT) {
-        MIT = mainstreetCrowdfund.recipientMITWithBonus(recipient);
+        MIT = mainstreetCrowdfund.recipientTotalMIT(recipient);
         ownerMIT[recipient] = MIT;
         totalMIT += MIT;
         isImported[recipient] = true;
