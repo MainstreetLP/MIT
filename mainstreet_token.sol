@@ -23,12 +23,15 @@ contract MainstreetToken is ERC20 {
     MainstreetCrowdfund public mainstreetCrowdfund;
     
     /**
-     * @dev 
+     * @dev A MIT balance has been imported.
+     * @param recipient Address imported.
+     * @param MIT Amount of MIT imported.
      */
     event RecipientImported(address indexed recipient, uint MIT);
 
     /**
      * @dev Constructor.
+     * @param _mainstreetCrowdfund Address of crowdfund contract.
      */
     function MainstreetToken(MainstreetCrowdfund _mainstreetCrowdfund) {
         mainstreetCrowdfund = _mainstreetCrowdfund;
@@ -36,6 +39,8 @@ contract MainstreetToken is ERC20 {
     
     /**
      * @dev Imports MIT balance from crowdfund contract.
+     * @param recipient Address to import.
+     * @return MIT Amount of MIT imported.
      */
     function importRecipient(address recipient) external notImported(recipient) returns (uint MIT) {
         MIT = mainstreetCrowdfund.recipientMITWithBonus(recipient);
@@ -73,7 +78,7 @@ contract MainstreetToken is ERC20 {
     }
 
     /**
-     * Unimplemented methods
+     * Unimplemented ERC20 methods.
      */
 
     function transferFrom(address _from, address _to, uint256 _value) returns (bool success) {
