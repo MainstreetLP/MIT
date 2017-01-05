@@ -48,6 +48,13 @@ contract MainstreetCrowdfund {
         _;
     }
     
+    modifier recipientIsNotThis(address recipient) {
+        if (recipient == address(this)) {
+            throw;
+        }
+        _;
+    }
+
     /**
      * @dev Constructor.
      * @param _start Timestamp of when the crowdsale will start.
@@ -71,40 +78,29 @@ contract MainstreetCrowdfund {
     
     /**
      * @dev Forward Ether to the exit address. Store all ETH and MIT information in public state and logs.
-     * @param recipient Address that tokens should ultimately be attributed to or 0 to attribute to sender.
-     * @return MIT Amount of MIT purchased.
+     * @param recipient Address that tokens should be attributed to.
+     * @return MIT Amount of MIT purchased. This does not include the per-recipient quantity bonus.
      */
-    function purchaseMIT(address recipient) senderIsWhitelisted payable saleActive hasValue returns (uint MIT) {
+    function purchaseMIT(address recipient) external senderIsWhitelisted payable saleActive hasValue recipientIsNotThis(recipient) returns (uint MIT) {
         
+        // Attempt to send the ETH to the exit address.
         if (!exitAddress.send(msg.value)) {
             throw;
         }
         
-        if (recipient == 0) {
-            recipient = msg.sender;
-        }
-        
-        if (recipient == address(this)) {
-            throw;
-        }
- 
-        MIT = msg.value * 8;
-        uint extra;
-        if (msg.value >= 250000 ether) {        // ether is just a multiplier
-            extra = (MIT * 75) / 1000;      // 7.5%
-        }
-        else if (msg.value >= 62500 ether) {    // ether is just a multiplier
-            extra = (MIT * 375) / 10000;    // 3.75%
-        }
+        uint costPerMIT;
         
         if (block.timestamp - start < 1 weeks) {
-            extra += MIT / 10;              // 10%
+            costPerMIT = 1125 ether / 10000;    // 0.1125 ETH per MIT (10% discount)
         }
         else if (block.timestamp - start < 5 weeks) {
-            extra += MIT / 20;              // 5%
+            costPerMIT = 11875 ether / 100000;  // 0.11875 ETH per MIT (5% discount)
+        }
+        else {
+            costPerMIT = 125 ether / 1000;      // 0.125 ETH per MIT
         }
 
-        MIT += extra;
+        MIT = (msg.value * 1 ether) / costPerMIT;
         senderETH[msg.sender] += msg.value;
         senderMIT[msg.sender] += MIT;
         recipientETH[recipient] += msg.value;
@@ -112,6 +108,20 @@ contract MainstreetCrowdfund {
         totalETH += msg.value;
         totalMIT += MIT;
         MITPurchase(msg.sender, recipient, msg.value, MIT);
+    }
+
+    /**
+     * @dev Calulcate the total MIT for an individual address including quantity bonus.
+     * @param recipient Address to caclulcate the bonus of.
+     * @return bonus Extra MIT awarded.
+     */
+    function recipientMITWithBonus(address recipient) external constant returns (uint MIT) {
+        if (recipientETH[recipient] >= 250000 ether) {          // $2,000,000+
+            MIT = (recipientMIT[recipient] * 1000) / 925;       // 7.5% discount
+        }
+        else if (recipientETH[recipient] >= 62500 ether) {      // $500,000+
+            MIT = (recipientMIT[recipient] * 10000) / 9625;     // 3.75% discount
+        }
     }
 
 }

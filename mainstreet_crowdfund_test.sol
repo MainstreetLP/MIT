@@ -47,52 +47,40 @@ contract MainstreetCrowdfundTest is Test {
         address recipient2 = 0x1235;
 
         uint MIT = mainstreetCrowdfund.purchaseMIT.value(1 ether)(recipient1);
-        assertEq(MIT, 8.8 ether);
+        assertEq(MIT, 8888888888888888888);
         assertEq(exitAddress.balance, 1 ether);
         assertEq(mainstreetCrowdfund.senderETH(this), 1 ether);
-        assertEq(mainstreetCrowdfund.senderMIT(this), 8.8 ether);
+        assertEq(mainstreetCrowdfund.senderMIT(this), 8888888888888888888);
         assertEq(mainstreetCrowdfund.recipientETH(recipient1), 1 ether);
-        assertEq(mainstreetCrowdfund.recipientMIT(recipient1), 8.8 ether);
+        assertEq(mainstreetCrowdfund.recipientMIT(recipient1), 8888888888888888888);
         assertEq(mainstreetCrowdfund.recipientETH(recipient2), 0);
         assertEq(mainstreetCrowdfund.recipientMIT(recipient2), 0);
         assertEq(mainstreetCrowdfund.totalETH(), 1 ether);
-        assertEq(mainstreetCrowdfund.totalMIT(), 8.8 ether);
+        assertEq(mainstreetCrowdfund.totalMIT(), 8888888888888888888);
 
         MIT = mainstreetCrowdfund.purchaseMIT.value(2 ether)(recipient1);
-        assertEq(MIT, 17.6 ether);
+        assertEq(MIT, 17777777777777777777);
         assertEq(exitAddress.balance, 3 ether);
         assertEq(mainstreetCrowdfund.senderETH(this), 3 ether);
-        assertEq(mainstreetCrowdfund.senderMIT(this), 26.4 ether);
+        assertEq(mainstreetCrowdfund.senderMIT(this), 26666666666666666665);
         assertEq(mainstreetCrowdfund.recipientETH(recipient1), 3 ether);
-        assertEq(mainstreetCrowdfund.recipientMIT(recipient1), 26.4 ether);
+        assertEq(mainstreetCrowdfund.recipientMIT(recipient1), 26666666666666666665);
         assertEq(mainstreetCrowdfund.recipientETH(recipient2), 0);
         assertEq(mainstreetCrowdfund.recipientMIT(recipient2), 0);
         assertEq(mainstreetCrowdfund.totalETH(), 3 ether);
-        assertEq(mainstreetCrowdfund.totalMIT(), 26.4 ether);
+        assertEq(mainstreetCrowdfund.totalMIT(), 26666666666666666665);
 
         MIT = mainstreetCrowdfund.purchaseMIT.value(2 ether)(recipient2);
-        assertEq(MIT, 17.6 ether);
+        assertEq(MIT, 17777777777777777777);
         assertEq(exitAddress.balance, 5 ether);
         assertEq(mainstreetCrowdfund.senderETH(this), 5 ether);
-        assertEq(mainstreetCrowdfund.senderMIT(this), 44 ether);
+        assertEq(mainstreetCrowdfund.senderMIT(this), 44444444444444444442);
         assertEq(mainstreetCrowdfund.recipientETH(recipient1), 3 ether);
-        assertEq(mainstreetCrowdfund.recipientMIT(recipient1), 26.4 ether);
+        assertEq(mainstreetCrowdfund.recipientMIT(recipient1), 26666666666666666665);
         assertEq(mainstreetCrowdfund.recipientETH(recipient2), 2 ether);
-        assertEq(mainstreetCrowdfund.recipientMIT(recipient2), 17.6 ether);
+        assertEq(mainstreetCrowdfund.recipientMIT(recipient2), 17777777777777777777);
         assertEq(mainstreetCrowdfund.totalETH(), 5 ether);
-        assertEq(mainstreetCrowdfund.totalMIT(), 44 ether);
-    }
-
-    function testPurchaseMitNoRecipient() {
-        uint MIT = mainstreetCrowdfund.purchaseMIT.value(1 ether)(0);
-        assertEq(MIT, 8.8 ether);
-        assertEq(exitAddress.balance, 6 ether);
-        assertEq(mainstreetCrowdfund.senderETH(this), 1 ether);
-        assertEq(mainstreetCrowdfund.senderMIT(this), 8.8 ether);
-        assertEq(mainstreetCrowdfund.recipientETH(this), 1 ether);
-        assertEq(mainstreetCrowdfund.recipientMIT(this), 8.8 ether);
-        assertEq(mainstreetCrowdfund.totalETH(), 1 ether);
-        assertEq(mainstreetCrowdfund.totalMIT(), 8.8 ether);
+        assertEq(mainstreetCrowdfund.totalMIT(), 44444444444444444442);
     }
 
     function testThrowsPurchaseMitLimit() {
