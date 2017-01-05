@@ -28,7 +28,7 @@ contract MainstreetCrowdfund {
         if (block.timestamp < start || block.timestamp >= end) {
             throw;
         }
-        if (totalETH + msg.value >= limit) {
+        if (totalETH + msg.value > limit) {
             throw;
         }
         _;
