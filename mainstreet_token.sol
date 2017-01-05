@@ -8,7 +8,8 @@ import "./mainstreet_crowdfund.sol";
  */
 contract MainstreetToken is ERC20 {
     
-    mapping (address => uint) public ownerMIT;
+    mapping (address => uint) ownerMIT;
+    mapping (address => mapping (address => uint)) allowed;
     uint public totalMIT;
     
     mapping (address => bool) public isImported;
@@ -78,19 +79,33 @@ contract MainstreetToken is ERC20 {
     }
 
     /**
-     * Unimplemented ERC20 methods.
+     * @dev Implements ERC20 transferFrom()
      */
-
     function transferFrom(address _from, address _to, uint256 _value) returns (bool success) {
-        throw;
+        if (allowed[_from][msg.sender] < _value || ownerMIT[_from] < _value) {
+            return false;
+        }
+        ownerMIT[_to] += _value;
+        ownerMIT[_from] -= _value;
+        allowed[_from][msg.sender] -= _value;
+        Transfer(_from, _to, _value);
+        return true;
     }
 
+    /**
+     * @dev Implements ERC20 approve()
+     */
     function approve(address _spender, uint256 _value) returns (bool success) {
-        throw;
+        allowed[msg.sender][_spender] = _value;
+        Approval(msg.sender, _spender, _value);
+        return true;
     }
 
+    /**
+     * @dev Implements ERC20 allowance()
+     */
     function allowance(address _owner, address _spender) constant returns (uint256 remaining) {
-        throw;
+        remaining = allowed[_owner][_spender];
     }
 
 }
