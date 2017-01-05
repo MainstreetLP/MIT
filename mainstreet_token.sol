@@ -36,6 +36,7 @@ contract MainstreetToken is ERC20 {
      */
     function MainstreetToken(MainstreetCrowdfund _mainstreetCrowdfund) {
         mainstreetCrowdfund = _mainstreetCrowdfund;
+        totalMIT = mainstreetCrowdfund.totalMIT();
     }
     
     /**
@@ -46,7 +47,6 @@ contract MainstreetToken is ERC20 {
     function importRecipient(address recipient) external notImported(recipient) returns (uint MIT) {
         MIT = mainstreetCrowdfund.recipientTotalMIT(recipient);
         ownerMIT[recipient] = MIT;
-        totalMIT += MIT;
         isImported[recipient] = true;
         RecipientImported(recipient, MIT);
     }
