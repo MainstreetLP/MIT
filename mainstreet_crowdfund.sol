@@ -110,10 +110,10 @@ contract MainstreetCrowdfund {
         uint oldExtra = recipientExtraMIT[recipient];
 
         if (recipientETH[recipient] >= 250000 ether) {          // $2,000,000+
-            recipientExtraMIT[recipient] = recipientMIT[recipient] - (recipientMIT[recipient] * 1000) / 925;       // 7.5% discount
+            recipientExtraMIT[recipient] = (recipientMIT[recipient] * 1000) / 925 - recipientMIT[recipient];       // 7.5% discount
         }
         else if (recipientETH[recipient] >= 62500 ether) {      // $500,000+
-            recipientExtraMIT[recipient] = recipientMIT[recipient] - (recipientMIT[recipient] * 10000) / 9625;     // 3.75% discount
+            recipientExtraMIT[recipient] = (recipientMIT[recipient] * 10000) / 9625 - recipientMIT[recipient];     // 3.75% discount
         }
 
         uint MITIncrease = MIT + (recipientExtraMIT[recipient] - oldExtra);
