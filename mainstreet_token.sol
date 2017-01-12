@@ -3,6 +3,7 @@ pragma solidity ^0.4.7;
 import "./erc20.sol";
 import "./mainstreet_crowdfund.sol";
 
+
 /**
  * @title MainstreetToken
  */
@@ -11,44 +12,57 @@ contract MainstreetToken is ERC20 {
     mapping (address => uint) ownerMIT;
     mapping (address => mapping (address => uint)) allowed;
     uint public totalMIT;
+    uint public start;
     
-    mapping (address => bool) public isImported;
+    MainstreetCrowdfund public mainstreetCrowdfund;
     
-    modifier notImported(address recipient) {
-        if (isImported[recipient]) {
+    modifier fromCrowdfund() {
+        if (msg.sender != address(mainstreetCrowdfund)) {
             throw;
         }
         _;
     }
     
-    MainstreetCrowdfund public mainstreetCrowdfund;
-    
+    modifier isActive() {
+        if (block.timestamp < start) {
+            throw;
+        }
+        _;
+    }
+
+    modifier isNotActive() {
+        if (block.timestamp >= start) {
+            throw;
+        }
+        _;
+    }
+
     /**
-     * @dev A MIT balance has been imported.
-     * @param recipient Address imported.
-     * @param MIT Amount of MIT imported.
+     * @dev Tokens have been added to an address by the crowdfunding contract.
+     * @param recipient Address receiving the MIT.
+     * @param MIT Amount of MIT added.
      */
-    event RecipientImported(address indexed recipient, uint MIT);
+    event TokensAdded(address indexed recipient, uint MIT);
 
     /**
      * @dev Constructor.
      * @param _mainstreetCrowdfund Address of crowdfund contract.
+     * @param _start Timestamp when the token becomes active.
      */
-    function MainstreetToken(MainstreetCrowdfund _mainstreetCrowdfund) {
+    function MainstreetToken(MainstreetCrowdfund _mainstreetCrowdfund, uint _start) {
         mainstreetCrowdfund = _mainstreetCrowdfund;
-        totalMIT = mainstreetCrowdfund.totalMIT();
+        start = _start;
     }
     
     /**
-     * @dev Imports MIT balance from crowdfund contract.
-     * @param recipient Address to import.
-     * @return MIT Amount of MIT imported.
+     * @dev Add to token balance on address. Must be from crowdfund.
+     * @param recipient Address to add tokens to.
+     * @return MIT Amount of MIT to add.
      */
-    function importRecipient(address recipient) external notImported(recipient) returns (uint MIT) {
-        MIT = mainstreetCrowdfund.recipientTotalMIT(recipient);
-        ownerMIT[recipient] = MIT;
-        isImported[recipient] = true;
-        RecipientImported(recipient, MIT);
+    function addTokens(address recipient, uint MIT) external isNotActive fromCrowdfund {
+        ownerMIT[recipient] += MIT;
+        totalMIT += MIT;
+        TokensAdded(recipient, MIT);
     }
 
     /**
@@ -68,7 +82,7 @@ contract MainstreetToken is ERC20 {
     /**
      * @dev Implements ERC20 transfer()
      */
-    function transfer(address _to, uint256 _value) returns (bool success) {
+    function transfer(address _to, uint256 _value) isActive returns (bool success) {
         if (ownerMIT[msg.sender] < _value) {
             return false;
         }
@@ -81,7 +95,7 @@ contract MainstreetToken is ERC20 {
     /**
      * @dev Implements ERC20 transferFrom()
      */
-    function transferFrom(address _from, address _to, uint256 _value) returns (bool success) {
+    function transferFrom(address _from, address _to, uint256 _value) isActive returns (bool success) {
         if (allowed[_from][msg.sender] < _value || ownerMIT[_from] < _value) {
             return false;
         }
@@ -95,7 +109,7 @@ contract MainstreetToken is ERC20 {
     /**
      * @dev Implements ERC20 approve()
      */
-    function approve(address _spender, uint256 _value) returns (bool success) {
+    function approve(address _spender, uint256 _value) isActive returns (bool success) {
         allowed[msg.sender][_spender] = _value;
         Approval(msg.sender, _spender, _value);
         return true;
