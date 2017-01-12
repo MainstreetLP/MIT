@@ -32,13 +32,14 @@ contract MainstreetCrowdfundTest is Test {
     uint start;
     uint end;
     
+    address intellisys = 0x1234;
     address exitAddress = 0x5678;
 
     function setUp() {
         start = block.timestamp;
         end = start + 5184000;
         mainstreetCrowdfund = new MainstreetCrowdfund(start, end, 10 ether, exitAddress, this, 0, 0);
-        mainstreetToken = new MainstreetToken(mainstreetCrowdfund, end);
+        mainstreetToken = new MainstreetToken(mainstreetCrowdfund, intellisys, end);
         mainstreetCrowdfund.setTokenContract(mainstreetToken);
     }
 

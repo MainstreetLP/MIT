@@ -15,6 +15,8 @@ contract MainstreetToken is ERC20 {
     uint public start;
     
     MainstreetCrowdfund public mainstreetCrowdfund;
+
+    address intellisys;
     
     modifier fromCrowdfund() {
         if (msg.sender != address(mainstreetCrowdfund)) {
@@ -47,10 +49,12 @@ contract MainstreetToken is ERC20 {
     /**
      * @dev Constructor.
      * @param _mainstreetCrowdfund Address of crowdfund contract.
+     * @param _intellisys Address to receive intellisys' tokens.
      * @param _start Timestamp when the token becomes active.
      */
-    function MainstreetToken(MainstreetCrowdfund _mainstreetCrowdfund, uint _start) {
+    function MainstreetToken(MainstreetCrowdfund _mainstreetCrowdfund, address _intellisys, uint _start) {
         mainstreetCrowdfund = _mainstreetCrowdfund;
+        intellisys = _intellisys;
         start = _start;
     }
     
@@ -61,8 +65,11 @@ contract MainstreetToken is ERC20 {
      */
     function addTokens(address recipient, uint MIT) external isNotActive fromCrowdfund {
         ownerMIT[recipient] += MIT;
-        totalMIT += MIT;
+        uint intellisysMIT = MIT / 10;
+        ownerMIT[intellisys] += intellisysMIT;
+        totalMIT += MIT + intellisysMIT;
         TokensAdded(recipient, MIT);
+        TokensAdded(intellisys, intellisysMIT);
     }
 
     /**
