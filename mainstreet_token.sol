@@ -16,7 +16,7 @@ contract MainstreetToken is ERC20 {
     
     MainstreetCrowdfund public mainstreetCrowdfund;
 
-    address intellisys;
+    address public intellisys;
     
     modifier fromCrowdfund() {
         if (msg.sender != address(mainstreetCrowdfund)) {
