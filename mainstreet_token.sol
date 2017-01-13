@@ -39,6 +39,13 @@ contract MainstreetToken is ERC20 {
         _;
     }
 
+    modifier recipientIsValid(address recipient) {
+        if (recipient == 0 || recipient == address(this)) {
+            throw;
+        }
+        _;
+    }
+
     /**
      * @dev Tokens have been added to an address by the crowdfunding contract.
      * @param recipient Address receiving the MIT.
@@ -89,7 +96,7 @@ contract MainstreetToken is ERC20 {
     /**
      * @dev Implements ERC20 transfer()
      */
-    function transfer(address _to, uint256 _value) isActive returns (bool success) {
+    function transfer(address _to, uint256 _value) isActive recipientIsValid(_to) returns (bool success) {
         if (ownerMIT[msg.sender] < _value) {
             return false;
         }
@@ -102,7 +109,7 @@ contract MainstreetToken is ERC20 {
     /**
      * @dev Implements ERC20 transferFrom()
      */
-    function transferFrom(address _from, address _to, uint256 _value) isActive returns (bool success) {
+    function transferFrom(address _from, address _to, uint256 _value) isActive recipientIsValid(_to) returns (bool success) {
         if (allowed[_from][msg.sender] < _value || ownerMIT[_from] < _value) {
             return false;
         }

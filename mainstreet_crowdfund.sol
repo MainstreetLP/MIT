@@ -56,8 +56,8 @@ contract MainstreetCrowdfund {
         _;
     }
 
-    modifier recipientIsNotThis(address recipient) {
-        if (recipient == address(this)) {
+    modifier recipientIsValid(address recipient) {
+        if (recipient == 0 || recipient == address(this)) {
             throw;
         }
         _;
@@ -112,7 +112,7 @@ contract MainstreetCrowdfund {
      * @param recipient Address that tokens should be attributed to.
      * @return MIT Amount of MIT purchased. This does not include the per-recipient quantity bonus.
      */
-    function purchaseMIT(address recipient) external senderIsWhitelisted payable saleActive hasValue recipientIsNotThis(recipient) returns (uint increaseMIT) {
+    function purchaseMIT(address recipient) external senderIsWhitelisted payable saleActive hasValue recipientIsValid(recipient) returns (uint increaseMIT) {
         
         // Attempt to send the ETH to the exit address.
         if (!exitAddress.send(msg.value)) {
