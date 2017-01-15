@@ -1,7 +1,6 @@
 pragma solidity ^0.4.7;
 
 import "./erc20.sol";
-import "./mainstreet_crowdfund.sol";
 
 
 /**
@@ -14,12 +13,12 @@ contract MainstreetToken is ERC20 {
     uint public totalMIT;
     uint public start;
     
-    MainstreetCrowdfund public mainstreetCrowdfund;
+    address public mainstreetCrowdfund;
 
     address public intellisys;
     
     modifier fromCrowdfund() {
-        if (msg.sender != address(mainstreetCrowdfund)) {
+        if (msg.sender != mainstreetCrowdfund) {
             throw;
         }
         _;
@@ -59,7 +58,7 @@ contract MainstreetToken is ERC20 {
      * @param _intellisys Address to receive intellisys' tokens.
      * @param _start Timestamp when the token becomes active.
      */
-    function MainstreetToken(MainstreetCrowdfund _mainstreetCrowdfund, address _intellisys, uint _start) {
+    function MainstreetToken(address _mainstreetCrowdfund, address _intellisys, uint _start) {
         mainstreetCrowdfund = _mainstreetCrowdfund;
         intellisys = _intellisys;
         start = _start;
