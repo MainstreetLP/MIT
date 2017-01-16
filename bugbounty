@@ -1,0 +1,50 @@
+Mainstreet Investment Token (MIT) Bug Bounty Program
+Welcome bounty hunters!
+
+We are starting our bug bounty program for all contracts and software relevant for our upcoming token launch. 
+
+Major bugs will be rewarded up to $500 (in BTC or ETH). Much higher rewards are possible (up to $5000) in case of very severe vulnerabilities.
+
+Most of the rules on https://bounty.ethereum.org apply. 
+
+For example: 
+First come, first serve. 
+Issues that have already been submitted by another user or are already known (such as these)to the team are not eligible for bounty rewards.
+
+Scope of MIT Bug Bounty Program
+Token contract: https://github.com/MainstreetLP/token/blob/master/mainstreet_token.sol
+ 
+Crowdfunding contract: https://github.com/MainstreetLP/token/blob/master/mainstreet_crowdfund.sol
+
+Dividends Contract: (link to be announced)
+
+Out of scope:
+Bugs related to Internet Explorer
+All browser rendering bugs that don’t affect the display of critical information such as ETH, MIT
+
+Examples of what’s in scope
+Being able to obtain more tokens (MIT) than expected
+Being able to obtain MIT from someone without their permission
+Bugs in either contract that lead to loss or theft of ETH
+Bugs causing a transaction to be sent that was different from what a user confirmed: for example, a user transfers 10 MIT in the UI, but exactly 10 wasn’t transferred.
+
+Examples of what’s out of scope
+Most user experience improvements on the frontend, for example some part of the website doesn’t update unless the page is refreshed
+
+Submission deadline
+The bug bounty ends on March 23rd, at the end of the funding period. However, the bounty program is still open for submissions regarding Dividends contract that have not been identified and fixed before the end of the first year after the sale.
+
+Responsible Disclosure Policy
+If you comply with the policies below when reporting a security issue to us, we will not initiate a lawsuit or law enforcement investigation against you in response to your report.
+
+We ask that:
+You give us reasonable time to investigate and mitigate an issue you report before making public any information about the report or sharing such information with others.
+You make a good faith effort to avoid privacy violations and disruptions to others, including (but not limited to) destruction of data and interruption or degradation of our services.
+You do not exploit a security issue you discover for any reason. (This includes demonstrating additional risk, such as attempted compromise of sensitive company data or probing for additional issues.)
+You do not violate any other applicable laws or regulations.
+
+Contact
+Submit your bugs via email to hello@intellisys.ai
+Don’t forget to include your BTC or ETH address in the email so you can be rewarded (If more than one address is specified, only one will be used at the discretion of the bounty program administrators).
+
+Anonymous submissions are welcome.
