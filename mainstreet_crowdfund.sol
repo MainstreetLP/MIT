@@ -20,6 +20,9 @@ contract MainstreetCrowdfund {
     uint public totalETH;
     uint public limitETH;
 
+    uint public bonus1StartETH;
+    uint public bonus2StartETH;
+
     mapping (address => bool) public whitelistedAddresses;
     
     address public exitAddress;
@@ -87,12 +90,14 @@ contract MainstreetCrowdfund {
      * @param whitelist2 Second address that can send ETH.
      * @param whitelist3 Third address that can send ETH.
      */
-    function MainstreetCrowdfund(uint _start, uint _end, uint _limitETH, address _exitAddress, address whitelist1, address whitelist2, address whitelist3) {
+    function MainstreetCrowdfund(uint _start, uint _end, uint _limitETH, uint _bonus1StartETH, uint _bonus2StartETH, address _exitAddress, address whitelist1, address whitelist2, address whitelist3) {
         creator = msg.sender;
         start = _start;
         end = _end;
         limitETH = _limitETH;
-        
+        bonus1StartETH = _bonus1StartETH;
+        bonus2StartETH = _bonus2StartETH;
+
         whitelistedAddresses[whitelist1] = true;
         whitelistedAddresses[whitelist2] = true;
         whitelistedAddresses[whitelist3] = true;
@@ -143,10 +148,10 @@ contract MainstreetCrowdfund {
         uint oldExtra = recipientExtraMIT[recipient];
 
         // Calculate new value-based bonus.
-        if (recipientETH[recipient] >= 200000 ether) {          // $2,000,000+
+        if (recipientETH[recipient] >= bonus2StartETH) {
             recipientExtraMIT[recipient] = (recipientMIT[recipient] * 8) / 100;      // 8% bonus
         }
-        else if (recipientETH[recipient] >= 50000 ether) {      // $500,000+
+        else if (recipientETH[recipient] >= bonus1StartETH) {
             recipientExtraMIT[recipient] = (recipientMIT[recipient] * 4) / 100;      // 4% bonus
         }
 
