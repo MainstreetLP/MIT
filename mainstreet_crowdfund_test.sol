@@ -38,6 +38,9 @@ contract MainstreetCrowdfundTest is Test {
     address whitelist2 = 0x9abc;
     address whitelist3 = 0xdef0;
 
+    address recipient1 = 0x1111;
+    address recipient2 = 0x2222;
+
     function setUp() {
         start = block.timestamp;
         end = start + 5184000;
@@ -58,6 +61,10 @@ contract MainstreetCrowdfundTest is Test {
         assertEq(mainstreetCrowdfund.whitelistedAddresses(whitelist3), true);
         assertEq(mainstreetCrowdfund.exitAddress(), exitAddress);
         assertEq(mainstreetCrowdfund.mainstreetToken(), mainstreetToken);
+
+        assertEq(mainstreetToken.start(), start + 5184000);
+        assertEq(mainstreetToken.mainstreetCrowdfund(), mainstreetCrowdfund);
+        assertEq(mainstreetToken.intellisys(), intellisys);
     }
 
     function testThrowsSenderNotWhitelisted1() {
@@ -82,9 +89,6 @@ contract MainstreetCrowdfundTest is Test {
     }
 
     function testPurchaseMit() {
-        address recipient1 = 0x1234;
-        address recipient2 = 0x1235;
-
         uint MIT = mainstreetCrowdfund.purchaseMIT.value(1 ether)(recipient1);
         assertEq(MIT, 11 ether);
         assertEq(exitAddress.balance, 1 ether);
@@ -97,6 +101,10 @@ contract MainstreetCrowdfundTest is Test {
         assertEq(mainstreetCrowdfund.recipientExtraMIT(recipient1), 0);
         assertEq(mainstreetCrowdfund.recipientExtraMIT(recipient2), 0);
         assertEq(mainstreetCrowdfund.totalETH(), 1 ether);
+        assertEq(mainstreetToken.balanceOf(recipient1), 11 ether);
+        assertEq(mainstreetToken.balanceOf(recipient2), 0 ether);
+        assertEq(mainstreetToken.balanceOf(intellisys), 1.1 ether);
+        assertEq(mainstreetToken.totalSupply(), 12.1 ether);
 
         MIT = mainstreetCrowdfund.purchaseMIT.value(2 ether)(recipient1);
         assertEq(MIT, 22 ether);
@@ -110,6 +118,10 @@ contract MainstreetCrowdfundTest is Test {
         assertEq(mainstreetCrowdfund.recipientExtraMIT(recipient1), 0);
         assertEq(mainstreetCrowdfund.recipientExtraMIT(recipient2), 0);
         assertEq(mainstreetCrowdfund.totalETH(), 3 ether);
+        assertEq(mainstreetToken.balanceOf(recipient1), 33 ether);
+        assertEq(mainstreetToken.balanceOf(recipient2), 0 ether);
+        assertEq(mainstreetToken.balanceOf(intellisys), 3.3 ether);
+        assertEq(mainstreetToken.totalSupply(), 36.3 ether);
 
         MIT = mainstreetCrowdfund.purchaseMIT.value(2 ether)(recipient2);
         assertEq(MIT, 22 ether);
@@ -123,6 +135,10 @@ contract MainstreetCrowdfundTest is Test {
         assertEq(mainstreetCrowdfund.recipientExtraMIT(recipient1), 0);
         assertEq(mainstreetCrowdfund.recipientExtraMIT(recipient2), 0);
         assertEq(mainstreetCrowdfund.totalETH(), 5 ether);
+        assertEq(mainstreetToken.balanceOf(recipient1), 33 ether);
+        assertEq(mainstreetToken.balanceOf(recipient2), 22 ether);
+        assertEq(mainstreetToken.balanceOf(intellisys), 5.5 ether);
+        assertEq(mainstreetToken.totalSupply(), 60.5 ether);
 
         MIT = mainstreetCrowdfund.purchaseMIT.value(2 ether)(recipient2);
         assertEq(MIT, 23.76 ether);
@@ -136,6 +152,10 @@ contract MainstreetCrowdfundTest is Test {
         assertEq(mainstreetCrowdfund.recipientExtraMIT(recipient1), 0);
         assertEq(mainstreetCrowdfund.recipientExtraMIT(recipient2), 1.76 ether);
         assertEq(mainstreetCrowdfund.totalETH(), 7 ether);
+        assertEq(mainstreetToken.balanceOf(recipient1), 33 ether);
+        assertEq(mainstreetToken.balanceOf(recipient2), 45.76 ether);
+        assertEq(mainstreetToken.balanceOf(intellisys), 7.876 ether);
+        assertEq(mainstreetToken.totalSupply(), 86.636 ether);
 
         MIT = mainstreetCrowdfund.purchaseMIT.value(2 ether)(recipient2);
         assertEq(MIT, 25.52 ether);
@@ -149,6 +169,10 @@ contract MainstreetCrowdfundTest is Test {
         assertEq(mainstreetCrowdfund.recipientExtraMIT(recipient1), 0);
         assertEq(mainstreetCrowdfund.recipientExtraMIT(recipient2), 5.28 ether);
         assertEq(mainstreetCrowdfund.totalETH(), 9 ether);
+        assertEq(mainstreetToken.balanceOf(recipient1), 33 ether);
+        assertEq(mainstreetToken.balanceOf(recipient2), 71.28 ether);
+        assertEq(mainstreetToken.balanceOf(intellisys), 10.428 ether);
+        assertEq(mainstreetToken.totalSupply(), 114.708 ether);
     }
 
 }
@@ -159,7 +183,6 @@ contract MainstreetCrowdfundTest is Test {
 contract MainstreetCrowdfundNoTokenTest is Test {
 
     MainstreetCrowdfund mainstreetCrowdfund;
-    MainstreetToken mainstreetToken;
 
     uint start;
     uint end;
@@ -169,6 +192,9 @@ contract MainstreetCrowdfundNoTokenTest is Test {
 
     address whitelist2 = 0x9abc;
     address whitelist3 = 0xdef0;
+
+    address recipient1 = 0x1111;
+    address recipient2 = 0x2222;
 
     function setUp() {
         start = block.timestamp;
@@ -190,7 +216,6 @@ contract MainstreetCrowdfundNoTokenTest is Test {
     }
 
     function testThrowsNoToken() {
-        address recipient1 = 0x1234;
         uint MIT = mainstreetCrowdfund.purchaseMIT.value(1 ether)(recipient1);
     }
 
@@ -213,6 +238,9 @@ contract MainstreetCrowdfundOverTest is Test {
     address whitelist2 = 0x9abc;
     address whitelist3 = 0xdef0;
 
+    address recipient1 = 0x1111;
+    address recipient2 = 0x2222;
+
     function setUp() {
         start = block.timestamp - 200;
         end = start + 100;
@@ -233,10 +261,13 @@ contract MainstreetCrowdfundOverTest is Test {
         assertEq(mainstreetCrowdfund.whitelistedAddresses(whitelist3), true);
         assertEq(mainstreetCrowdfund.exitAddress(), exitAddress);
         assertEq(mainstreetCrowdfund.mainstreetToken(), mainstreetToken);
+
+        assertEq(mainstreetToken.start(), start + 100);
+        assertEq(mainstreetToken.mainstreetCrowdfund(), mainstreetCrowdfund);
+        assertEq(mainstreetToken.intellisys(), intellisys);
     }
 
     function testThrowsSaleIsOver() {
-        address recipient1 = 0x1234;
         uint MIT = mainstreetCrowdfund.purchaseMIT.value(1 ether)(recipient1);
     }
 
