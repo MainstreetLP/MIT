@@ -2,7 +2,6 @@ pragma solidity ^0.4.8;
 
 import "dapple/test.sol";
 import "./mainstreet_crowdfund.sol";
-import "./mainstreet_token.sol";
 
 
 contract SenderProxy {
@@ -45,7 +44,7 @@ contract MainstreetCrowdfundTest is Test {
         start = block.timestamp;
         end = start + 5184000;
         mainstreetCrowdfund = new MainstreetCrowdfund(start, end, 10 ether, 4 ether, 5 ether, exitAddress, this, whitelist2, whitelist3);
-        mainstreetToken = new MainstreetToken(mainstreetCrowdfund, intellisys, end);
+        mainstreetToken = new MainstreetToken(mainstreetCrowdfund, intellisys, end, false);
         mainstreetCrowdfund.setTokenContract(mainstreetToken);
     }
 
@@ -245,7 +244,7 @@ contract MainstreetCrowdfundOverTest is Test {
         start = block.timestamp - 200;
         end = start + 100;
         mainstreetCrowdfund = new MainstreetCrowdfund(start, end, 10 ether, 2 ether, 5 ether, exitAddress, this, whitelist2, whitelist3);
-        mainstreetToken = new MainstreetToken(mainstreetCrowdfund, intellisys, end);
+        mainstreetToken = new MainstreetToken(mainstreetCrowdfund, intellisys, end, false);
         mainstreetCrowdfund.setTokenContract(mainstreetToken);
     }
 

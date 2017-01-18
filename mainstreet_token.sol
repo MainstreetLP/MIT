@@ -17,6 +17,8 @@ contract MainstreetToken is ERC20 {
 
     address public intellisys;
     
+    bool public testing;
+
     modifier fromCrowdfund() {
         if (msg.sender != mainstreetCrowdfund) {
             throw;
@@ -32,7 +34,7 @@ contract MainstreetToken is ERC20 {
     }
 
     modifier isNotActive() {
-        if (block.timestamp >= start) {
+        if (!testing && block.timestamp >= start) {
             throw;
         }
         _;
@@ -40,6 +42,31 @@ contract MainstreetToken is ERC20 {
 
     modifier recipientIsValid(address recipient) {
         if (recipient == 0 || recipient == address(this)) {
+            throw;
+        }
+        _;
+    }
+
+    modifier senderHasSufficient(uint MIT) {
+        if (ownerMIT[msg.sender] < MIT) {
+            throw;
+        }
+        _;
+    }
+
+    modifier transferApproved(address from, uint MIT) {
+        if (allowed[from][msg.sender] < MIT || ownerMIT[from] < MIT) {
+            throw;
+        }
+        _;
+    }
+
+    modifier allowanceIsZero(address spender, uint value) {
+        // To change the approve amount you first have to reduce the addresses´
+        // allowance to zero by calling `approve(_spender,0)` if it is not
+        // already 0 to mitigate the race condition described here:
+        // https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729
+        if ((value != 0) && (allowed[msg.sender][spender] != 0)) {
             throw;
         }
         _;
@@ -58,10 +85,11 @@ contract MainstreetToken is ERC20 {
      * @param _intellisys Address to receive intellisys' tokens.
      * @param _start Timestamp when the token becomes active.
      */
-    function MainstreetToken(address _mainstreetCrowdfund, address _intellisys, uint _start) {
+    function MainstreetToken(address _mainstreetCrowdfund, address _intellisys, uint _start, bool _testing) {
         mainstreetCrowdfund = _mainstreetCrowdfund;
         intellisys = _intellisys;
         start = _start;
+        testing = _testing;
     }
     
     /**
@@ -95,10 +123,7 @@ contract MainstreetToken is ERC20 {
     /**
      * @dev Implements ERC20 transfer()
      */
-    function transfer(address _to, uint256 _value) isActive recipientIsValid(_to) returns (bool success) {
-        if (ownerMIT[msg.sender] < _value) {
-            return false;
-        }
+    function transfer(address _to, uint256 _value) isActive recipientIsValid(_to) senderHasSufficient(_value) returns (bool success) {
         ownerMIT[msg.sender] -= _value;
         ownerMIT[_to] += _value;
         Transfer(msg.sender, _to, _value);
@@ -108,10 +133,7 @@ contract MainstreetToken is ERC20 {
     /**
      * @dev Implements ERC20 transferFrom()
      */
-    function transferFrom(address _from, address _to, uint256 _value) isActive recipientIsValid(_to) returns (bool success) {
-        if (allowed[_from][msg.sender] < _value || ownerMIT[_from] < _value) {
-            return false;
-        }
+    function transferFrom(address _from, address _to, uint256 _value) isActive recipientIsValid(_to) transferApproved(_from, _value) returns (bool success) {
         ownerMIT[_to] += _value;
         ownerMIT[_from] -= _value;
         allowed[_from][msg.sender] -= _value;
@@ -122,15 +144,7 @@ contract MainstreetToken is ERC20 {
     /**
      * @dev Implements ERC20 approve()
      */
-    function approve(address _spender, uint256 _value) isActive returns (bool success) {
-        // To change the approve amount you first have to reduce the addresses´
-        // allowance to zero by calling `approve(_spender,0)` if it is not
-        // already 0 to mitigate the race condition described here:
-        // https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729
-        if ((_value != 0) && (allowed[msg.sender][_spender] != 0)) {
-            throw;
-        }
-
+    function approve(address _spender, uint256 _value) isActive allowanceIsZero(_spender, _value) returns (bool success) {
         allowed[msg.sender][_spender] = _value;
         Approval(msg.sender, _spender, _value);
         return true;
