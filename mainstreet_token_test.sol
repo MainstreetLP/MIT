@@ -185,9 +185,11 @@ contract MainstreetTokenTestingModeTest is Test {
         assertEq(mainstreetToken.balanceOf(this), 1 ether);
         assertEq(mainstreetToken.balanceOf(recipient1), 0);
         mainstreetToken.approve(this, 1 ether);
+        assertEq(mainstreetToken.allowance(this, this), 1 ether);
         mainstreetToken.transferFrom(this, recipient1, 1 ether);
         assertEq(mainstreetToken.balanceOf(this), 0);
         assertEq(mainstreetToken.balanceOf(recipient1), 1 ether);
+        assertEq(mainstreetToken.allowance(this, this), 0 ether);
     }
 
     function testThrowsTransferFromRecipientIsZero() {
