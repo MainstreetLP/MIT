@@ -85,6 +85,8 @@ contract MainstreetCrowdfund {
      * @param _start Timestamp of when the crowdsale will start.
      * @param _end Timestamp of when the crowdsale will end.
      * @param _limitETH Maximum amount of ETH that can be sent to the contract in total. Denominated in wei.
+     * @param _bonus1StartETH Amount of Ether (denominated in wei) that is required to qualify for the first bonus.
+     * @param _bonus1StartETH Amount of Ether (denominated in wei) that is required to qualify for the second bonus.
      * @param _exitAddress Address that all ETH should be forwarded to.
      * @param whitelist1 First address that can send ETH.
      * @param whitelist2 Second address that can send ETH.
