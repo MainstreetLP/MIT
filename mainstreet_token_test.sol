@@ -204,16 +204,18 @@ contract MainstreetTokenTestingModeTest is Test {
         mainstreetToken.transferFrom(this, mainstreetToken, 1 ether);
     }
 
-    function testThrowsTransferFromNotEnough() {
+    function testTransferFromNotEnough() {
         mainstreetToken.addTokens(this, 1 ether);
         mainstreetToken.approve(this, 2 ether);
-        mainstreetToken.transferFrom(this, recipient1, 2 ether);
+        bool result = mainstreetToken.transferFrom(this, recipient1, 2 ether);
+        assertFalse(result);
     }
 
-    function testThrowsTransferFromNotEnoughApproved() {
+    function testTransferFromNotEnoughApproved() {
         mainstreetToken.addTokens(this, 2 ether);
         mainstreetToken.approve(this, 1 ether);
-        mainstreetToken.transferFrom(this, recipient1, 2 ether);
+        bool result = mainstreetToken.transferFrom(this, recipient1, 2 ether);
+        assertFalse(result);
     }
 
 }
