@@ -140,7 +140,7 @@ contract MainstreetCrowdfundTest is Test {
         assertEq(mainstreetToken.totalSupply(), 60.5 ether);
 
         MIT = mainstreetCrowdfund.purchaseMIT.value(2 ether)(recipient2);
-        assertEq(MIT, 23.76 ether);
+        assertEq(MIT, 23.65 ether);
         assertEq(exitAddress.balance, 7 ether);
         assertEq(mainstreetCrowdfund.senderETH(this), 7 ether);
         assertEq(mainstreetCrowdfund.senderMIT(this), 77 ether);
@@ -149,15 +149,15 @@ contract MainstreetCrowdfundTest is Test {
         assertEq(mainstreetCrowdfund.recipientETH(recipient2), 4 ether);
         assertEq(mainstreetCrowdfund.recipientMIT(recipient2), 44 ether);
         assertEq(mainstreetCrowdfund.recipientExtraMIT(recipient1), 0);
-        assertEq(mainstreetCrowdfund.recipientExtraMIT(recipient2), 1.76 ether);
+        assertEq(mainstreetCrowdfund.recipientExtraMIT(recipient2), 1.65 ether);
         assertEq(mainstreetCrowdfund.totalETH(), 7 ether);
         assertEq(mainstreetToken.balanceOf(recipient1), 33 ether);
-        assertEq(mainstreetToken.balanceOf(recipient2), 45.76 ether);
-        assertEq(mainstreetToken.balanceOf(intellisys), 7.876 ether);
-        assertEq(mainstreetToken.totalSupply(), 86.636 ether);
+        assertEq(mainstreetToken.balanceOf(recipient2), 45.65 ether);
+        assertEq(mainstreetToken.balanceOf(intellisys), 7.865 ether);
+        assertEq(mainstreetToken.totalSupply(), 86.515 ether);
 
         MIT = mainstreetCrowdfund.purchaseMIT.value(2 ether)(recipient2);
-        assertEq(MIT, 25.52 ether);
+        assertEq(MIT, 25.30 ether);
         assertEq(exitAddress.balance, 9 ether);
         assertEq(mainstreetCrowdfund.senderETH(this), 9 ether);
         assertEq(mainstreetCrowdfund.senderMIT(this), 99 ether);
@@ -166,12 +166,12 @@ contract MainstreetCrowdfundTest is Test {
         assertEq(mainstreetCrowdfund.recipientETH(recipient2), 6 ether);
         assertEq(mainstreetCrowdfund.recipientMIT(recipient2), 66 ether);
         assertEq(mainstreetCrowdfund.recipientExtraMIT(recipient1), 0);
-        assertEq(mainstreetCrowdfund.recipientExtraMIT(recipient2), 5.28 ether);
+        assertEq(mainstreetCrowdfund.recipientExtraMIT(recipient2), 4.95 ether);
         assertEq(mainstreetCrowdfund.totalETH(), 9 ether);
         assertEq(mainstreetToken.balanceOf(recipient1), 33 ether);
-        assertEq(mainstreetToken.balanceOf(recipient2), 71.28 ether);
-        assertEq(mainstreetToken.balanceOf(intellisys), 10.428 ether);
-        assertEq(mainstreetToken.totalSupply(), 114.708 ether);
+        assertEq(mainstreetToken.balanceOf(recipient2), 70.95 ether);
+        assertEq(mainstreetToken.balanceOf(intellisys), 10.395 ether);
+        assertEq(mainstreetToken.totalSupply(), 114.345 ether);
     }
 
 }
