@@ -1,3 +1,50 @@
+/*
+
+Mainstreet MITs Explanatory Language
+
+Each Subscriber to the Fund will execute a subscription agreement and agree the
+terms of a partnership agreement relating to the Fund. On acceptance of its
+subscription by the Fund, execution of the partnership agreement and entry on
+the Fund's limited partner records, a subscriber will become a Limited Partner
+in the Fund.
+
+Each Limited Partner will be issued with a certain number of Tokens by the Fund
+in return for its subscription in the Fund.
+
+Limited Partners, as part of the subscription process, will have provided to
+the Fund all necessary due diligence and "know your client" information to
+enable the Fund to discharge its regulatory obligations.
+
+Although the Tokens issued to Limited Partners are operationally transferable,
+either peer-to-peer or though a variety of Blockchain-enabled exchanges, it is
+only the beneficial entitlement/ownership of the Tokens that is capable of being
+transferred using such peer-to-peer networks or Blockchain exchanges.
+
+It is only once a person is registered as a Limited Partner of the Fund that
+such person becomes fully entitled to the rights associated with the Token and
+the rights of a Limited Partner in the Fund.
+
+If a Transferee wishes to perfect its legal ownership as a Limited Partner in
+the Fund, the Transferee must register with the Fund, execute a subscription
+agreement and/or such other documentation as the general partner of the Fund
+shall require and provide all necessary "know your client" and due diligence
+information that will permit the Fund to register the Transferee as a Limited
+Partner in the Fund in substitution for the Transferor of the Tokens.
+
+The registered Limited Partner to which such Token was originally issued remains
+the legal holder of the Limited Partner interest in the Fund and retains the
+entitlement to all distributions and profit realisation in respect of the Token. 
+The arrangements governing the transfer of the Token from Transferor to
+Transferee may oblige the Transferor to account for any such benefits to the
+Transferee, but the Fund is only legally obliged to deal with the registered
+Limited Partner of the Fund to which the relevant Tokens relate.
+
+It is therefore incumbent on any Transferee/purchaser of Tokens to register with
+the Fund as a Limited Partner as soon as possible.  Please contact the General
+Partner to discuss the requirements to effect such registration.
+
+*/
+
 pragma solidity ^0.4.9;
 
 import "./mainstreet_token.sol";
@@ -7,7 +54,7 @@ import "./mainstreet_token.sol";
  * @title MainstreetCrowdfund
  */
 contract MainstreetCrowdfund {
-    
+
     uint public start;
     uint public end;
 
@@ -24,7 +71,7 @@ contract MainstreetCrowdfund {
     uint public bonus2StartETH;
 
     mapping (address => bool) public whitelistedAddresses;
-    
+
     address public exitAddress;
     address public creator;
 
@@ -51,7 +98,7 @@ contract MainstreetCrowdfund {
         }
         _;
     }
-    
+
     modifier senderIsWhitelisted() {
         if (whitelistedAddresses[msg.sender] != true) {
             throw;
@@ -105,7 +152,7 @@ contract MainstreetCrowdfund {
         whitelistedAddresses[whitelist3] = true;
         exitAddress = _exitAddress;
     }
-    
+
     /**
      * @dev Set the address of the token contract. Must be called by creator of this. Can only be set once.
      * @param _mainstreetToken Address of the token contract.
@@ -120,12 +167,12 @@ contract MainstreetCrowdfund {
      * @return MIT Amount of MIT purchased. This does not include the per-recipient quantity bonus.
      */
     function purchaseMIT(address recipient) external senderIsWhitelisted payable saleActive hasValue recipientIsValid(recipient) returns (uint increaseMIT) {
-        
+
         // Attempt to send the ETH to the exit address.
         if (!exitAddress.send(msg.value)) {
             throw;
         }
-        
+
         // Update ETH amounts.
         senderETH[msg.sender] += msg.value;
         recipientETH[recipient] += msg.value;
@@ -135,7 +182,7 @@ contract MainstreetCrowdfund {
         uint MIT = msg.value * 10;   // $1 / MIT based on $10 / ETH value
 
         // Calculate time-based bonus.
-        if (block.timestamp - start < 1 weeks) {
+        if (block.timestamp - start < 2 weeks) {
             MIT += MIT / 10;    // 10% bonus
         }
         else if (block.timestamp - start < 5 weeks) {
@@ -151,10 +198,10 @@ contract MainstreetCrowdfund {
 
         // Calculate new value-based bonus.
         if (recipientETH[recipient] >= bonus2StartETH) {
-            recipientExtraMIT[recipient] = (recipientMIT[recipient] * 8) / 100;      // 8% bonus
+            recipientExtraMIT[recipient] = (recipientMIT[recipient] * 75) / 1000;      // 7.5% bonus
         }
         else if (recipientETH[recipient] >= bonus1StartETH) {
-            recipientExtraMIT[recipient] = (recipientMIT[recipient] * 4) / 100;      // 4% bonus
+            recipientExtraMIT[recipient] = (recipientMIT[recipient] * 375) / 10000;      // 3.75% bonus
         }
 
         // Calculate MIT increase for this address from this transaction.
